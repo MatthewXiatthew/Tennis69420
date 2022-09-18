@@ -14,8 +14,18 @@ async def internal_register(request: Request):
     
     username_ = body.get("username")
     password_ = body.get("password")
+    name_ = body.get("name")
 
-    session.add(User(username=username_, password=password_))
+    reviewer_ = False
+    if (body.get("reviewer") == "reviewer"):
+        reviewer_ = True
+    elif (body.get("reviewer") == "user"):
+        reviewer_ = False
+
+    if (session.query(User).filter_by(username = username_).first()):
+        return RedirectResponse("/register", HTTPStatus.FOUND)
+
+    session.add(User(username=username_, password=password_, name=name_, reviewer=reviewer_))
     
     session.commit()
     

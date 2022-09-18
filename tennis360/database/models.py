@@ -13,11 +13,10 @@ class User(Base):
     __tablename__ = "User"
     
     id_ = Column("id_", Integer, primary_key = True)
-    
     username = Column("username", String, nullable = False, unique = True)
-    
+    name = Column("name", String, nullable = False)
     password = Column("password", String, nullable = False)
-    
+    reviewer = Column("reviewer", Boolean, default = False)
     posts = relationship("Post", back_populates="user")
     
     def get_id(self):

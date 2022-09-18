@@ -3,9 +3,7 @@ from urllib.parse import parse_qs
 
 from starlette.requests import Request
 
-async def body_as_json(
-    request: Request, parameters: List[str]
-) -> Optional[Dict[str, str]]:
+async def body_as_json( request: Request, parameters: List[str]) -> Optional[Dict[str, str]]:
 
     body = parse_qs((await request.body()).decode("utf-8"), True)
 

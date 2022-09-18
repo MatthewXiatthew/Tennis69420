@@ -11,15 +11,19 @@ from router.guest.get import signin, register
 from router.guest.post import internal_signin, internal_register
 from router.user.get import internal_signout, post, explore, view, profile, edit
 from router.user.post import internal_post, delete, internal_edit
+from database.main import session
+from database.models import User
+from authentication import get_user
 
 templates = Jinja2Templates(directory="templates")
 
 async def home(request: Request):
     
     if request.cookies.get("logged-in"):
-        
+
         return templates.TemplateResponse("/user/home.jinja2", {
-            "request":request
+            "request":request,
+            "user" : session.query(User).filter_by(username = get_user(request).username).first()
         })
         
     return templates.TemplateResponse("/guest/home.jinja2", {
