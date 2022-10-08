@@ -17,5 +17,4 @@ async def upload(file_name):
                 asset_ids = [asset_id]
             )
 
-    print(link['short_url'])
     return link['short_url']
