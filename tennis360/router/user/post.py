@@ -20,7 +20,7 @@ async def internal_post(request: Request):
 
     session.commit()
 
-    with open(f"/Users/matthewxia/Documents/Coding/Tennis69420/tennis360/videos/{newpost.id_}.mov", "wb") as f:
+    with open(f"videos/{newpost.id_}.mov", "wb") as f:
         f.write(await body["video"].read())
 
     newpost.link = await upload(newpost.id_)
