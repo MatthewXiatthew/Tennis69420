@@ -6,7 +6,7 @@
     
     {% if post and post.deleted == False %}
 
-        <h2> {{ post.title }}</h2>
+        <a href={{post.link}} target="_blank"><h2> {{ post.title }}</h2></a>
 
         <a href="/profile/{{ post.user.id_ }}"> By: {{ post.user.username }} </a>
 
@@ -17,7 +17,6 @@
         <div class="text">
         
             <p> {{ post.text }} </p>
-
         </div>
 
         <br>

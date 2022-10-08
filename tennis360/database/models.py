@@ -28,17 +28,12 @@ class Post(Base):
     __tablename__ = "Post"
     
     id_ = Column("id_", Integer, primary_key=True)
-    
     userid = Column("userid", Integer, ForeignKey(User.id_), nullable=False)
-    
     title = Column("title", String, nullable = False)
-    
     text = Column("text", String, nullable=False)
-    
     deleted = Column("deleted", Boolean, default=False, nullable=False)
-    
     time = Column("time", DateTime, nullable=False, server_default=now())
-    
+    link = Column("time", String, nullable=False, default = "")
     user = relationship("User", back_populates="posts")
     
     

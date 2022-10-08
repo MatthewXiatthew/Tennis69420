@@ -13,9 +13,17 @@
         
         <div class="post">
             {% for post in user.posts %}
-                {% if post.deleted is defined %}
+                {% if not post.deleted%}
                 
                     <a href="/view/{{ post.id_ }}"> {{ post.title }} </a>
+                    <br>
+
+                {% endif %}
+            {% endfor %}
+            {% for post in user.posts %}
+                {% if post.deleted%}
+                
+                    <a href="/view/{{ post.id_ }}" style="color:rgb(169, 169, 169)"> {{ post.title }} </a>
                     <br>
 
                 {% endif %}

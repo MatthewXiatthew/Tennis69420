@@ -1,12 +1,12 @@
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
-from helper import body_as_json
 from database.models import User, Post
 from database.main import session
 from authentication import get_user
 
 from http import HTTPStatus
+from frame import upload
     
 async def internal_post(request: Request):
     
@@ -14,13 +14,17 @@ async def internal_post(request: Request):
         
         return RedirectResponse("/", HTTPStatus.FOUND)
     
-    body = await body_as_json(request, ["title", "text"])
+    body = await request.form()
     
-    title_ = body.get("title")
-    text_ = body.get("text")
-    
-    session.add(Post(title=title_, text=text_, user=get_user(request)))
-    
+    session.add(newpost := Post(title=body["title"], text=body["text"], user=get_user(request)))
+
+    session.commit()
+
+    with open(f"/Users/matthewxia/Documents/Coding/Tennis69420/tennis360/videos/{newpost.id_}.mov", "wb") as f:
+        f.write(await body["video"].read())
+
+    newpost.link = await upload(newpost.id_)
+
     session.commit()
     
     return RedirectResponse("/explore", HTTPStatus.FOUND)
@@ -62,10 +66,10 @@ async def internal_edit(request: Request):
 
         return RedirectResponse("/", HTTPStatus.FOUND)
     
-    body = await body_as_json(request, ["title", "text"])
+    body = await request.form()
     
-    post.title = body.get("title")
-    post.text = body.get("text")
+    post.title = body["title"]
+    post.text = body["text"]
     
     session.commit()    
     

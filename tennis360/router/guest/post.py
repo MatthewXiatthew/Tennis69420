@@ -1,7 +1,6 @@
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
-from helper import body_as_json
 from database.models import User
 from database.main import session
 from authentication import login_user
@@ -10,22 +9,18 @@ from http import HTTPStatus
 
 async def internal_register(request: Request):
     
-    body = await body_as_json(request, ["username", "password"])
-    
-    username_ = body.get("username")
-    password_ = body.get("password")
-    name_ = body.get("name")
+    body = await request.form()
 
     reviewer_ = False
-    if (body.get("reviewer") == "reviewer"):
+    if (body["reviewer"] == "reviewer"):
         reviewer_ = True
-    elif (body.get("reviewer") == "user"):
+    elif (body["reviewer"] == "user"):
         reviewer_ = False
 
-    if (session.query(User).filter_by(username = username_).first()):
+    if (session.query(User).filter_by(username = body["username"]).first()):
         return RedirectResponse("/register", HTTPStatus.FOUND)
 
-    session.add(User(username=username_, password=password_, name=name_, reviewer=reviewer_))
+    session.add(User(username=body["username"], password=body["password"], name=body["name"], reviewer=reviewer_))
     
     session.commit()
     
@@ -33,14 +28,11 @@ async def internal_register(request: Request):
     
 async def internal_signin(request: Request):
     
-    body = await body_as_json(request, ["username", "password"])
+    body = await request.form()
     
-    username_ = body.get("username")
-    password_ = body.get("password")
+    user = session.query(User).filter_by(username = body["username"]).first()
     
-    user = session.query(User).filter_by(username = username_).first()
-    
-    if user is None or user.password != password_:
+    if user is None or user.password != body["password"]:
         
         return RedirectResponse("/", HTTPStatus.FOUND)
     
