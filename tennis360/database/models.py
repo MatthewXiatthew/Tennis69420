@@ -33,7 +33,7 @@ class Post(Base):
     text = Column("text", String, nullable=False)
     deleted = Column("deleted", Boolean, default=False, nullable=False)
     time = Column("time", DateTime, nullable=False, server_default=now())
-    link = Column("time", String, nullable=False, default = "")
+    link = Column("link", String, nullable=False, default = "")
     user = relationship("User", back_populates="posts")
     
     
