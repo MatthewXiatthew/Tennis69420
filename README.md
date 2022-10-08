@@ -5,4 +5,6 @@ Run through terminal, not through VScode.
 
 cd to tennis360 folder
 
+install all necessary dependencies (starlette. sqlalchemy, pyjwt)
+
 enter "python3 main.py" in terminal
